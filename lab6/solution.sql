@@ -82,3 +82,16 @@ UPDATE inventory SET item_cost = 20.00 WHERE item_id = 1; -- Попытка из
 END;
 COMMIT;
 SELECT * FROM inventory WHERE item_id = 1;
+
+
+BEGIN;
+INSERT INTO inventory (item_name, item_cost) VALUES ('Item E', 50.00);
+INSERT INTO inventory (item_name, item_cost) VALUES ('Item F', 60.00);
+SAVEPOINT sp2;
+SELECT * FROM inventory;
+INSERT INTO inventory (item_name, item_cost) VALUES ('Item G', 70.00);
+SAVEPOINT sp3;
+UPDATE inventory SET item_cost = -10 WHERE item_id = 9999;  -- Ошибка
+ROLLBACK TO SAVEPOINT sp2;
+COMMIT;
+SELECT * FROM inventory;
